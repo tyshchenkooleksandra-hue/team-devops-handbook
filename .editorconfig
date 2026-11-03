@@ -10,6 +10,10 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
 
+# YAML/JSON: відступ змістовний (визначає структуру), фіксуємо явно, а не через [*]
+[*.{yml,yaml,json}]
+indent_size = 2
+
 [*.py]
 indent_size = 4
 max_line_length = 100
