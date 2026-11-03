@@ -42,3 +42,31 @@ curl -sL "https://www.toptal.com/developers/gitignore/api/linux,macos,windows,py
 | `python`, `node`, `go` | Мови консольних утиліт курсу: `__pycache__/`, `node_modules/`, зібрані `*.exe` |
 | `visualstudiocode`, `jetbrains+all` | Локальні налаштування редакторів |
 | `dotenv` | `.env` із секретами ніколи не потрапляє в репозиторій |
+
+### Власна секція
+
+Генератор не покриває дві речі, потрібні консольним утилітам курсу, — їх додано вручну в кінці файла:
+
+| Правило | Чому |
+|---|---|
+| `*.tar`, `*.tar.gz`, `*.tgz`, `*.zip` | Архіви збірок і резервних копій. Їх немає в жодному з обраних шаблонів |
+| `/bin/`, `/build/` | Зібрані бінарники на Linux/macOS **без розширення** — шаблон `go` ловить лише `*.exe`. Тому ігноруємо теки збірки, а утиліту збираємо в `bin/` (`dist/` уже є в шаблоні `python`) |
+
+### Перевірка
+
+Тестова тека з архівом, `.env`, `__pycache__/` і бінарником, зібраним у `bin/`:
+
+```text
+$ git status --short -uall
+                                  # порожньо — нічого зайвого
+$ git check-ignore -v test-ignore/backup.tar.gz test-ignore/.env test-ignore/__pycache__/m.cpython-314.pyc bin/tool
+.gitignore:522:*.tar.gz      test-ignore/backup.tar.gz
+.gitignore:5:.env            test-ignore/.env
+.gitignore:306:__pycache__/  test-ignore/__pycache__/m.cpython-314.pyc
+.gitignore:527:/bin/         bin/tool
+```
+
+`git check-ignore -v` показує, **яке саме правило** спрацювало, — так видно, що файл ігнорується не випадково.
+
+> Обмеження: бінарник, зібраний просто в корінь (`gcc tool.c -o tool`), не ігнорується — ім'я без
+> розширення неможливо відрізнити від звичайного файла. Тому збірка в `bin/` — частина конвенції.

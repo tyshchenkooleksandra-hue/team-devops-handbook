@@ -137,7 +137,7 @@ fabric.properties
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
 
 # Thumbnails
 ._*
@@ -515,3 +515,14 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,macos,windows,python,node,go,visualstudiocode,jetbrains+all,dotenv
+
+### Власна секція команди (не з генератора) ###
+# Архіви: збірки й резервні копії утиліт, у репозиторії не зберігаємо
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+# Зібрані бінарники: на Linux/macOS вони без розширення, тому ігноруємо теки збірки.
+# Конвенція курсу: утиліта збирається в bin/ або dist/, а не в корінь репозиторію.
+/bin/
+/build/
