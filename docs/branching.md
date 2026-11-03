@@ -58,6 +58,11 @@
 
 [`.githooks/commit-msg`](../.githooks/commit-msg) відхиляє коміт, якщо повідомлення не у форматі вище.
 
+Повідомлення, які Git генерує сам, хук **пропускає**: `Merge …` (`git merge`), `Revert "…"`
+(`git revert`), `fixup! …` / `squash! …` / `amend! …` (`git commit --fixup` для `rebase -i --autosquash`).
+Інакше хук зупиняв би звичайні операції, і люди почали б обходити його через `--no-verify`.
+В історію `main` такі повідомлення однаково не потрапляють — там лише заголовок PR після squash.
+
 ### Встановлення
 
 Тека `.git/hooks` **не версіонується** — хук, покладений туди, з клоном не приїде. Тому хук лежить
@@ -78,6 +83,7 @@ $ git commit --allow-empty -m "update"
     update
 $ git commit --allow-empty -m "docs: перевірка хука"
 [feature/… 1a2b3c4] docs: перевірка хука
+$ git merge main                      # автоматичне «Merge branch 'main' into …» — пропущено
 ```
 
 Локальний хук можна обійти (`git commit --no-verify`) — він лише економить час автора.

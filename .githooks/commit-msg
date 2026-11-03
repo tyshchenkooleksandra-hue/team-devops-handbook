@@ -7,6 +7,12 @@ msg_file="$1"
 # перший непорожній рядок, що не є коментарем
 header=$(grep -v '^#' "$msg_file" | grep -m1 -v '^[[:space:]]*$')
 
+# Повідомлення, які генерує сам Git (merge, revert, fixup/squash для rebase -i), пропускаємо:
+# інакше хук блокує стандартні операції і привчає до --no-verify.
+if [[ "$header" =~ ^(Merge\ |Revert\ \"|fixup!\ |squash!\ |amend!\ ) ]]; then
+  exit 0
+fi
+
 types='build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test'
 pattern="^(${types})(\([a-z0-9-]+\))?!?: [^ ].{0,98}$"
 
