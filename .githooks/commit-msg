@@ -4,6 +4,7 @@
 # Git передає шлях до файла з повідомленням першим аргументом.
 
 msg_file="$1"
+export LC_ALL=C.UTF-8   # щоб [[ =~ ]] коректно порівнював кириличні літери
 # перший непорожній рядок, що не є коментарем
 header=$(grep -v '^#' "$msg_file" | grep -m1 -v '^[[:space:]]*$')
 
@@ -16,7 +17,11 @@ fi
 types='build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test'
 pattern="^(${types})(\([a-z0-9-]+\))?!?: [^ ].{0,98}$"
 
-if [[ "$header" =~ $pattern ]]; then
+# Те саме правило, що й у CI (.github/workflows/commit-conventions.yml):
+# опис після «тип: » починається з малої літери.
+upper='[A-ZАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ]'
+subject="${header#*: }"
+if [[ "$header" =~ $pattern ]] && ! [[ "${subject:0:1}" =~ $upper ]]; then
   exit 0
 fi
 
@@ -25,7 +30,7 @@ cat >&2 <<MSG
 
     $header
 
-Формат:  <тип>(<область>)?: <опис>
+Формат:  <тип>(<область>)?: <опис з малої літери>
 Типи:    ${types//|/, }
 Приклад: docs(branching): додати правила іменування гілок
 
