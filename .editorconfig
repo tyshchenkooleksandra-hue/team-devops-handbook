@@ -1,4 +1,5 @@
-# Налаштування редактора (версія Олександри)
+# Спільні налаштування редактора для проєктів курсу.
+# Пояснення кожного значення — docs/editor-config.md
 root = true
 
 [*]
@@ -7,16 +8,23 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 indent_style = space
-indent_size = 4
-
-[*.{yml,yaml,json}]
 indent_size = 2
 
-[*.sh]
+[*.py]
 indent_size = 4
+max_line_length = 100
+
+[*.sh]
+indent_size = 2
+
+[*.go]
+indent_style = tab
 
 [Makefile]
 indent_style = tab
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.{bat,cmd,ps1}]
+end_of_line = crlf
