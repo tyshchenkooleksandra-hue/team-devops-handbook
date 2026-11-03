@@ -43,14 +43,28 @@
 | Усі обговорення мають бути закриті | увімкнено |
 | Заборона force-push і видалення гілки | увімкнено |
 | Лінійна історія, злиття лише squash | увімкнено |
+| Обов'язкова перевірка `pr-title` (формат заголовка PR) | увімкнено |
 | Обхід правил (bypass list) | порожній — **адміністратор теж іде через PR** |
+
+Заборону обходу видно через API — обійти правила не може ніхто, включно з власницею репозиторію:
+
+```text
+$ gh api repos/tyshchenkooleksandra-hue/team-devops-handbook/rulesets/26492456     --jq '"enforcement: "+.enforcement+", bypass_actors: "+(.bypass_actors|tostring)+", current_user_can_bypass: "+.current_user_can_bypass'
+enforcement: active, bypass_actors: [], current_user_can_bypass: never
+```
+
+<p>
+  <img src="assets/ruleset-1.jpg" alt="Ruleset protect-main: правила pull request" width="420">
+  <img src="assets/ruleset-2.jpg" alt="Ruleset protect-main: перевірка статусу й заборона force-push" width="420">
+</p>
 
 ## Як працювати
 
-1. Гілка від свіжого `main`: `feature/<ім'я>-<тема>`.
-2. Одна зміна — один pull request; опис за шаблоном.
-3. Правки після рецензії — **окремим комітом** у ту саму гілку, без переписування історії.
-4. Злиття — squash, повідомлення коміту — заголовок PR.
+1. Після клонування — один раз: `git config core.hooksPath .githooks` (хук формату коміту, див. [`docs/branching.md`](docs/branching.md)).
+2. Гілка від свіжого `main`: `feature/<ім'я>-<тема>`.
+3. Одна зміна — один pull request; опис за шаблоном.
+4. Правки після рецензії — **окремим комітом** у ту саму гілку, без переписування історії.
+5. Злиття — squash, повідомлення коміту — заголовок PR. Список змін генерується автоматично (див. [`docs/branching.md`](docs/branching.md#список-змін)).
 
 ## Як забрати довідник у свій репозиторій
 
